@@ -4,9 +4,6 @@ import githubReducer from './GithubReducer';
 
 const GithubContext = createContext();
 
-const GH_URL = process.env.REACT_APP_GH_URL;
-const GH_TOKEN = process.env.REACT_APP_GH_TOKEN;
-
 export const GithubProvider = ({ children }) => {
   // Use initialstate because of reducer instead of useState
   const initialState = {
@@ -19,61 +16,11 @@ export const GithubProvider = ({ children }) => {
   // dispatch is used to dispatch an action to the reducer
   const [state, dispatch] = useReducer(githubReducer, initialState);
 
-  // Get single user
-  const getUser = async (login) => {
-    setIsLoading();
-
-    const response = await fetch(`${GH_URL}/users/${login}`, {
-      headers: {
-        Authorization: `token ${GH_TOKEN}`,
-      },
-    });
-
-    if (response.status === 404) {
-      window.location = '/notfound';
-    } else {
-      const data = await response.json();
-
-      dispatch({
-        type: 'GET_USER',
-        payload: data,
-      });
-    }
-  };
-
-  const getRepos = async (login) => {
-    setIsLoading();
-
-    const params = new URLSearchParams({
-      sort: 'created',
-      per_page: 10,
-    });
-
-    const response = await fetch(`${GH_URL}/users/${login}/repos?${params}`, {
-      headers: {
-        Authorization: `token ${GH_TOKEN}`,
-      },
-    });
-    const data = await response.json();
-
-    dispatch({
-      type: 'GET_REPOS',
-      payload: data,
-    });
-  };
-
-  const clearUsers = () => dispatch({ type: 'CLEAR_USERS' });
-
-  const setIsLoading = () => dispatch({ type: 'SET_ISLOADING' });
-
   return (
     <GithubContext.Provider
       value={{
         ...state,
         dispatch,
-        getUser,
-        clearUsers,
-        getRepos,
       }}
     >
       {children}
