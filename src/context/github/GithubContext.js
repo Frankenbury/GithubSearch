@@ -4,7 +4,7 @@ import githubReducer from './GithubReducer';
 const GithubContext = createContext();
 
 export const GithubProvider = ({ children }) => {
-  // Use initialstate because of reducer instead of useState
+  // Set up global state on load
   const initialState = {
     users: [],
     user: {},
@@ -12,7 +12,7 @@ export const GithubProvider = ({ children }) => {
     isLoading: false,
   };
 
-  // dispatch is used to dispatch an action to the reducer
+  // Setup dispatch to reducer to manage state
   const [state, dispatch] = useReducer(githubReducer, initialState);
 
   return (
