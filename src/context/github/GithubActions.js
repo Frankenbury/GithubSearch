@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Environmentals for API and token
 const GH_URL = process.env.REACT_APP_GH_URL;
 const GH_TOKEN = process.env.REACT_APP_GH_TOKEN;
 
